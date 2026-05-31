@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Мой современный сайт</title>
+    <title>Удача или Неудача — испытай судьбу</title>
     <style>
         * {
             margin: 0;
@@ -13,10 +13,10 @@
 
         body {
             font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(145deg, #f6f9fc 0%, #eef2f5 100%);
-            color: #1a2c3e;
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
             line-height: 1.5;
-            scroll-behavior: smooth;
+            min-height: 100vh;
         }
 
         .container {
@@ -25,184 +25,189 @@
             padding: 0 24px;
         }
 
-        /* Header */
+        /* Header с вкладками */
         header {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(12px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .navbar {
+        .tabs {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 0;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1e6f9f, #2b9c6c);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 28px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            font-weight: 500;
-            color: #2c4c6e;
-            transition: 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: #1e88e5;
-        }
-
-        /* Hero */
-        .hero {
-            padding: 100px 0 80px;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 3.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1a4d6b, #238b5e);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            max-width: 700px;
-            margin: 0 auto 32px;
-            color: #2c5a7a;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #1e6f9f;
-            color: white;
-            padding: 12px 32px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.25s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: #0f5a87;
-            transform: translateY(-2px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Cards / Features */
-        .features {
-            padding: 60px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 48px;
-            font-weight: 700;
-            color: #1f3b4c;
-        }
-
-        .cards {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 32px;
             justify-content: center;
+            gap: 8px;
+            padding: 16px 0;
+            flex-wrap: wrap;
         }
 
-        .card {
-            background: white;
-            border-radius: 28px;
-            padding: 32px 24px;
-            flex: 1 1 280px;
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #ccc;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #1a1a2e;
+            box-shadow: 0 4px 15px rgba(247, 151, 30, 0.3);
+        }
+
+        /* Контент вкладок */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+            padding: 40px 0 60px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Карточка игры */
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            border-radius: 48px;
+            padding: 40px 30px;
             text-align: center;
-            transition: 0.2s;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
         }
 
-        .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-icon {
-            font-size: 3rem;
+        .game-icon {
+            font-size: 4rem;
             margin-bottom: 16px;
         }
 
-        .card h3 {
+        h2 {
+            font-size: 2rem;
             margin-bottom: 12px;
-            font-size: 1.5rem;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
         }
 
-        /* About */
-        .about {
-            background: white;
-            border-radius: 48px;
-            margin: 40px 0;
-            padding: 60px 40px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        .sub {
+            color: #aaa;
+            margin-bottom: 30px;
         }
 
-        /* Footer */
-        footer {
-            background: #0e2a38;
-            color: #cbd5e1;
-            padding: 40px 0 24px;
-            margin-top: 60px;
-            text-align: center;
+        .roll-btn {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 14px 40px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            margin: 20px 0;
+            box-shadow: 0 6px 0 #b45f06;
         }
 
-        .footer-links {
+        .roll-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #b45f06;
+        }
+
+        .result {
+            font-size: 3rem;
+            font-weight: 800;
+            background: rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            padding: 20px 40px;
+            border-radius: 80px;
+            margin: 20px 0;
+            letter-spacing: 2px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .history {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #bbb;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .history span {
+            color: #ffd966;
+            font-weight: bold;
+        }
+
+        .magic-ball {
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle at 30% 30%, #1e1e2f, #000000);
+            border-radius: 50%;
+            margin: 20px auto;
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 32px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), inset 0 -10px 20px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: 0.1s transform;
         }
 
-        .footer-links a {
-            color: #b9d7ef;
-            text-decoration: none;
+        .magic-ball:active {
+            transform: scale(0.97);
         }
 
-        @media (max-width: 700px) {
-            .navbar {
-                flex-direction: column;
-            }
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            .about {
-                padding: 40px 20px;
-            }
+        .ball-answer {
+            background: #f0f0f0;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1a1a2e;
+            text-align: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            font-family: monospace;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 650px) {
+            .tab-btn { padding: 8px 18px; font-size: 0.9rem; }
+            .result { font-size: 2rem; padding: 12px 24px; }
+            .game-card { padding: 30px 20px; }
+            h2 { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -210,69 +215,131 @@
 
 <header>
     <div class="container">
-        <div class="navbar">
-            <div class="logo">✨ MyBrand</div>
-            <ul class="nav-links">
-                <li><a href="#">Главная</a></li>
-                <li><a href="#features">Возможности</a></li>
-                <li><a href="#about">О нас</a></li>
-                <li><a href="#">Контакты</a></li>
-            </ul>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="dice16">🎲 КУБИК 1d16</button>
+            <button class="tab-btn" data-tab="percent">🎯 СЛУЧАЙ 1–100</button>
+            <button class="tab-btn" data-tab="oracle">🔮 МАГИЧЕСКИЙ ШАР</button>
         </div>
     </div>
 </header>
 
 <main>
     <div class="container">
-        <section class="hero">
-            <h1>Создай что-то значимое</h1>
-            <p>Простой, красивый и современный сайт. Готов к запуску за 5 минут. Адаптивный и лёгкий.</p>
-            <a href="#" class="btn">Начать →</a>
-        </section>
-    </div>
-
-    <div class="container" id="features">
-        <section class="features">
-            <h2 class="section-title">Почему выбирают нас</h2>
-            <div class="cards">
-                <div class="card">
-                    <div class="card-icon">⚡</div>
-                    <h3>Молниеносно</h3>
-                    <p>Минималистичный код, который грузится за доли секунды на любом устройстве.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">🎨</div>
-                    <h3>Стильный дизайн</h3>
-                    <p>Современные градиенты, плавные тени и приятная цветовая гамма.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">📱</div>
-                    <h3>Адаптивность</h3>
-                    <p>Идеально смотрится на телефонах, планшетах и больших экранах.</p>
-                </div>
+        <!-- Вкладка 1: Кубик 1d16 -->
+        <div id="dice16" class="tab-content active">
+            <div class="game-card">
+                <div class="game-icon">🎲⚡</div>
+                <h2>Бросок судьбы 1d16</h2>
+                <div class="sub">Нажми на кубик — узнай число от 1 до 16</div>
+                <button class="roll-btn" id="rollD16Btn">🎲 БРОСИТЬ КУБИК</button>
+                <div class="result" id="d16Result">—</div>
+                <div class="history">📜 Последний бросок: <span id="lastD16">—</span></div>
             </div>
-        </section>
-    </div>
+        </div>
 
-    <div class="container" id="about">
-        <section class="about">
-            <h2 class="section-title">Немного о проекте</h2>
-            <p style="max-width: 700px; margin: 0 auto; font-size: 1.1rem;">Этот шаблон создан, чтобы вы могли быстро представить свои идеи в сети. Замените текст, изображения, ссылки — и ваш уникальный сайт готов. HTML + CSS в одном файле — никаких сложностей.</p>
-        </section>
+        <!-- Вкладка 2: Число 1–100 -->
+        <div id="percent" class="tab-content">
+            <div class="game-card">
+                <div class="game-icon">🎯✨</div>
+                <h2>Генератор 1 — 100</h2>
+                <div class="sub">Случайное число от 1 до 100</div>
+                <button class="roll-btn" id="rollPercentBtn">🌀 ПОЛУЧИТЬ ЧИСЛО</button>
+                <div class="result" id="percentResult">—</div>
+                <div class="history">📜 Предыдущее значение: <span id="lastPercent">—</span></div>
+            </div>
+        </div>
+
+        <!-- Вкладка 3: Магический шар Да / Нет -->
+        <div id="oracle" class="tab-content">
+            <div class="game-card">
+                <div class="game-icon">🔮⭐</div>
+                <h2>Магический шар</h2>
+                <div class="sub">Коснись шара — он ответит Да или Нет</div>
+                <div class="magic-ball" id="magicBall">
+                    <div class="ball-answer" id="ballAnswer">?</div>
+                </div>
+                <div class="history">📜 Последний ответ: <span id="lastOracle">—</span></div>
+            </div>
+        </div>
     </div>
 </main>
 
 <footer>
     <div class="container">
-        <div class="footer-links">
-            <a href="#">О нас</a>
-            <a href="#">Услуги</a>
-            <a href="#">Блог</a>
-            <a href="#">Контакты</a>
-        </div>
-        <p>© 2026 Мой современный сайт. Вдохновляй и создавай.</p>
+        <p>🎲 Удача или Неудача? Судьба в твоих руках.</p>
     </div>
 </footer>
 
+<script>
+    // === 1) Кубик 1d16 ===
+    const d16Btn = document.getElementById('rollD16Btn');
+    const d16Result = document.getElementById('d16Result');
+    const lastD16 = document.getElementById('lastD16');
+
+    d16Btn.addEventListener('click', () => {
+        const value = Math.floor(Math.random() * 16) + 1;  // от 1 до 16 включительно
+        d16Result.textContent = value;
+        // обновляем последний бросок
+        lastD16.textContent = value;
+        // маленький визуальный эффект
+        d16Result.style.transform = 'scale(1.1)';
+        setTimeout(() => { d16Result.style.transform = 'scale(1)'; }, 150);
+    });
+
+    // === 2) Генератор от 1 до 100 ===
+    const percentBtn = document.getElementById('rollPercentBtn');
+    const percentResult = document.getElementById('percentResult');
+    const lastPercent = document.getElementById('lastPercent');
+
+    percentBtn.addEventListener('click', () => {
+        const value = Math.floor(Math.random() * 100) + 1; // 1..100
+        percentResult.textContent = value;
+        lastPercent.textContent = value;
+        percentResult.style.transform = 'scale(1.1)';
+        setTimeout(() => { percentResult.style.transform = 'scale(1)'; }, 150);
+    });
+
+    // === 3) Магический шар (Да / Нет) ===
+    const magicBallDiv = document.getElementById('magicBall');
+    const ballAnswer = document.getElementById('ballAnswer');
+    const lastOracle = document.getElementById('lastOracle');
+
+    function getRandomYesNo() {
+        return Math.random() < 0.5 ? "ДА" : "НЕТ";
+    }
+
+    magicBallDiv.addEventListener('click', () => {
+        const answer = getRandomYesNo();
+        ballAnswer.textContent = answer;
+        lastOracle.textContent = answer;
+        
+        // эффект вспышки
+        ballAnswer.style.transform = 'scale(1.2)';
+        setTimeout(() => { ballAnswer.style.transform = 'scale(1)'; }, 150);
+        
+        // вибрация шара (лёгкая анимация)
+        magicBallDiv.style.transform = 'rotate(2deg)';
+        setTimeout(() => { magicBallDiv.style.transform = 'rotate(-2deg)'; }, 50);
+        setTimeout(() => { magicBallDiv.style.transform = 'rotate(0deg)'; }, 100);
+    });
+
+    // === Переключение между вкладками (без перезагрузки страницы) ===
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            
+            // убираем active у всех кнопок и контента
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // добавляем active для нажатой кнопки и нужной вкладки
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+</script>
 </body>
 </html>
