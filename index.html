@@ -160,26 +160,55 @@
             font-weight: bold;
         }
 
+        /* ===== АНИМАЦИЯ КУБИКА ===== */
+        @keyframes shakeRoll {
+            0% { transform: rotate(0deg) scale(1); }
+            20% { transform: rotate(30deg) scale(1.1); }
+            40% { transform: rotate(-30deg) scale(1.1); }
+            60% { transform: rotate(15deg) scale(1.05); }
+            80% { transform: rotate(-15deg) scale(1.05); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        .dice-rolling {
+            animation: shakeRoll 0.4s ease-in-out;
+        }
+
+        /* ===== МАГИЧЕСКИЙ ШАР ===== */
         .magic-ball {
             width: 220px;
             height: 220px;
-            background: radial-gradient(circle at 30% 30%, #1e1e2f, #000000);
+            background: radial-gradient(circle at 30% 30%, #2a0a3a, #0a0015);
             border-radius: 50%;
             margin: 20px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), inset 0 -10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 30px rgba(128, 0, 255, 0.3), inset 0 -10px 20px rgba(0,0,0,0.5);
             cursor: pointer;
             transition: 0.1s transform;
+            position: relative;
         }
 
         .magic-ball:active {
             transform: scale(0.97);
         }
 
+        /* Фиолетовое свечение при активации */
+        @keyframes purpleGlow {
+            0% { box-shadow: 0 0 20px rgba(156, 39, 176, 0.4), inset 0 0 10px rgba(156, 39, 176, 0.2); }
+            25% { box-shadow: 0 0 60px rgba(156, 39, 176, 0.9), inset 0 0 25px rgba(156, 39, 176, 0.5); }
+            50% { box-shadow: 0 0 100px rgba(156, 39, 176, 1), inset 0 0 40px rgba(156, 39, 176, 0.8); }
+            75% { box-shadow: 0 0 60px rgba(156, 39, 176, 0.9), inset 0 0 25px rgba(156, 39, 176, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(156, 39, 176, 0.4), inset 0 0 10px rgba(156, 39, 176, 0.2); }
+        }
+
+        .magic-active {
+            animation: purpleGlow 0.6s ease-out;
+        }
+
         .ball-answer {
-            background: #f0f0f0;
+            background: #1a1a2e;
             width: 100px;
             height: 100px;
             border-radius: 50%;
@@ -188,10 +217,22 @@
             justify-content: center;
             font-size: 2rem;
             font-weight: bold;
-            color: #1a1a2e;
+            color: #d4af37;
             text-align: center;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3), 0 0 10px rgba(212, 175, 55, 0.3);
             font-family: monospace;
+            transition: all 0.2s;
+        }
+
+        /* Магический свет для ответа */
+        @keyframes answerGlow {
+            0% { text-shadow: 0 0 5px #ff00ff, color: #d4af37; background: #1a1a2e; }
+            50% { text-shadow: 0 0 25px #ff00ff, 0 0 10px #aa00ff; color: #ffffff; background: #2a0a5a; }
+            100% { text-shadow: 0 0 5px #ff00ff, color: #d4af37; background: #1a1a2e; }
+        }
+
+        .answer-magic-glow {
+            animation: answerGlow 0.5s ease-out;
         }
 
         footer {
@@ -208,6 +249,8 @@
             .result { font-size: 2rem; padding: 12px 24px; }
             .game-card { padding: 30px 20px; }
             h2 { font-size: 1.6rem; }
+            .magic-ball { width: 170px; height: 170px; }
+            .ball-answer { width: 75px; height: 75px; font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -225,7 +268,7 @@
 
 <main>
     <div class="container">
-        <!-- Вкладка 1: Кубик 1d16 -->
+        <!-- Вкладка 1: Кубик 1d16 с анимацией -->
         <div id="dice16" class="tab-content active">
             <div class="game-card">
                 <div class="game-icon">🎲⚡</div>
@@ -249,7 +292,7 @@
             </div>
         </div>
 
-        <!-- Вкладка 3: Магический шар Да / Нет -->
+        <!-- Вкладка 3: Магический шар с фиолетовым свечением -->
         <div id="oracle" class="tab-content">
             <div class="game-card">
                 <div class="game-icon">🔮⭐</div>
@@ -271,19 +314,30 @@
 </footer>
 
 <script>
-    // === 1) Кубик 1d16 ===
+    // === 1) Кубик 1d16 с анимацией броска ===
     const d16Btn = document.getElementById('rollD16Btn');
     const d16Result = document.getElementById('d16Result');
     const lastD16 = document.getElementById('lastD16');
 
     d16Btn.addEventListener('click', () => {
-        const value = Math.floor(Math.random() * 16) + 1;  // от 1 до 16 включительно
-        d16Result.textContent = value;
-        // обновляем последний бросок
-        lastD16.textContent = value;
-        // маленький визуальный эффект
-        d16Result.style.transform = 'scale(1.1)';
-        setTimeout(() => { d16Result.style.transform = 'scale(1)'; }, 150);
+        // Добавляем анимацию на кнопку или на результат
+        d16Btn.classList.add('dice-rolling');
+        d16Result.style.opacity = '0.5';
+        
+        // Небольшая задержка перед показом результата (эффект "броска")
+        setTimeout(() => {
+            const value = Math.floor(Math.random() * 16) + 1;
+            d16Result.textContent = value;
+            lastD16.textContent = value;
+            d16Result.style.opacity = '1';
+            d16Result.style.transform = 'scale(1.1)';
+            setTimeout(() => { d16Result.style.transform = 'scale(1)'; }, 150);
+        }, 200);
+        
+        // Убираем класс анимации, чтобы можно было перезапустить
+        setTimeout(() => {
+            d16Btn.classList.remove('dice-rolling');
+        }, 500);
     });
 
     // === 2) Генератор от 1 до 100 ===
@@ -292,14 +346,14 @@
     const lastPercent = document.getElementById('lastPercent');
 
     percentBtn.addEventListener('click', () => {
-        const value = Math.floor(Math.random() * 100) + 1; // 1..100
+        const value = Math.floor(Math.random() * 100) + 1;
         percentResult.textContent = value;
         lastPercent.textContent = value;
         percentResult.style.transform = 'scale(1.1)';
         setTimeout(() => { percentResult.style.transform = 'scale(1)'; }, 150);
     });
 
-    // === 3) Магический шар (Да / Нет) ===
+    // === 3) Магический шар с фиолетовым свечением и магическим светом ответа ===
     const magicBallDiv = document.getElementById('magicBall');
     const ballAnswer = document.getElementById('ballAnswer');
     const lastOracle = document.getElementById('lastOracle');
@@ -309,21 +363,45 @@
     }
 
     magicBallDiv.addEventListener('click', () => {
+        // 1. Убираем предыдущие анимации, если есть
+        magicBallDiv.classList.remove('magic-active');
+        ballAnswer.classList.remove('answer-magic-glow');
+        
+        // 2. Принудительный reflow для перезапуска анимации
+        void magicBallDiv.offsetWidth;
+        void ballAnswer.offsetWidth;
+        
+        // 3. Добавляем фиолетовое свечение шару
+        magicBallDiv.classList.add('magic-active');
+        
+        // 4. Получаем ответ
         const answer = getRandomYesNo();
-        ballAnswer.textContent = answer;
-        lastOracle.textContent = answer;
         
-        // эффект вспышки
-        ballAnswer.style.transform = 'scale(1.2)';
-        setTimeout(() => { ballAnswer.style.transform = 'scale(1)'; }, 150);
+        // 5. Немного задерживаем показ ответа, чтобы свечение успело начаться
+        setTimeout(() => {
+            ballAnswer.textContent = answer;
+            lastOracle.textContent = answer;
+            
+            // 6. Добавляем магический свет ответу
+            ballAnswer.classList.add('answer-magic-glow');
+            
+            // 7. Эффект "вспышки" на ответе
+            ballAnswer.style.transform = 'scale(1.2)';
+            setTimeout(() => { ballAnswer.style.transform = 'scale(1)'; }, 200);
+        }, 100);
         
-        // вибрация шара (лёгкая анимация)
-        magicBallDiv.style.transform = 'rotate(2deg)';
-        setTimeout(() => { magicBallDiv.style.transform = 'rotate(-2deg)'; }, 50);
-        setTimeout(() => { magicBallDiv.style.transform = 'rotate(0deg)'; }, 100);
+        // 8. Вибрация шара
+        magicBallDiv.style.transform = 'rotate(3deg) scale(0.98)';
+        setTimeout(() => { magicBallDiv.style.transform = 'rotate(-3deg) scale(0.98)'; }, 50);
+        setTimeout(() => { magicBallDiv.style.transform = 'rotate(0deg) scale(1)'; }, 150);
+        
+        // 9. Убираем класс свечения через некоторое время
+        setTimeout(() => {
+            magicBallDiv.classList.remove('magic-active');
+        }, 700);
     });
 
-    // === Переключение между вкладками (без перезагрузки страницы) ===
+    // === Переключение между вкладками ===
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -331,15 +409,15 @@
         btn.addEventListener('click', () => {
             const tabId = btn.getAttribute('data-tab');
             
-            // убираем active у всех кнопок и контента
             tabBtns.forEach(b => b.classList.remove('active'));
             tabContents.forEach(content => content.classList.remove('active'));
             
-            // добавляем active для нажатой кнопки и нужной вкладки
             btn.classList.add('active');
             document.getElementById(tabId).classList.add('active');
         });
     });
 </script>
+</body>
+</html>
 </body>
 </html>
