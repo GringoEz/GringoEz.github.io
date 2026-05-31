@@ -27,7 +27,7 @@
 
         /* Header с вкладками */
         header {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: sticky;
@@ -44,8 +44,8 @@
         }
 
         .tab-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #ccc;
             font-size: 1.1rem;
             font-weight: 600;
@@ -54,10 +54,11 @@
             cursor: pointer;
             transition: all 0.2s;
             font-family: inherit;
+            backdrop-filter: blur(4px);
         }
 
         .tab-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
         }
 
@@ -65,17 +66,54 @@
             background: linear-gradient(135deg, #f7971e, #ffd200);
             color: #1a1a2e;
             box-shadow: 0 4px 15px rgba(247, 151, 30, 0.3);
+            border-color: transparent;
         }
 
-        /* Контент вкладок */
+        /* Контент вкладок с фоновыми картинками */
         .tab-content {
             display: none;
             animation: fadeIn 0.3s ease;
             padding: 40px 0 60px;
+            border-radius: 32px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        /* Затемнение фона для читаемости текста */
+        .tab-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 32px;
+            z-index: 0;
+        }
+
+        .tab-content > * {
+            position: relative;
+            z-index: 1;
         }
 
         .tab-content.active {
             display: block;
+        }
+
+        /* Фоны для каждой вкладки */
+        #dice16 {
+            background-image: url('Pub.png');
+        }
+
+        #percent {
+            background-image: url('Hunt.jpg');
+        }
+
+        #oracle {
+            background-image: url('Mystic.jpg');
         }
 
         @keyframes fadeIn {
@@ -83,17 +121,17 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Карточка игры */
+        /* Карточка игры (полупрозрачная для читаемости) */
         .game-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
             border-radius: 48px;
             padding: 40px 30px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             max-width: 600px;
             margin: 0 auto;
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5);
         }
 
         .game-icon {
@@ -111,7 +149,7 @@
         }
 
         .sub {
-            color: #aaa;
+            color: #ddd;
             margin-bottom: 30px;
         }
 
@@ -138,20 +176,20 @@
         .result {
             font-size: 3rem;
             font-weight: 800;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
             display: inline-block;
             padding: 20px 40px;
             border-radius: 80px;
             margin: 20px 0;
             letter-spacing: 2px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.5);
         }
 
         .history {
             margin-top: 30px;
             font-size: 0.9rem;
-            color: #bbb;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ddd;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
             padding-top: 20px;
         }
 
@@ -268,7 +306,7 @@
 
 <main>
     <div class="container">
-        <!-- Вкладка 1: Кубик 1d16 с анимацией -->
+        <!-- Вкладка 1: Кубик 1d16 с фоном Pub.png -->
         <div id="dice16" class="tab-content active">
             <div class="game-card">
                 <div class="game-icon">🎲⚡</div>
@@ -280,7 +318,7 @@
             </div>
         </div>
 
-        <!-- Вкладка 2: Число 1–100 -->
+        <!-- Вкладка 2: Число 1–100 с фоном Hunt.jpg -->
         <div id="percent" class="tab-content">
             <div class="game-card">
                 <div class="game-icon">🎯✨</div>
@@ -292,7 +330,7 @@
             </div>
         </div>
 
-        <!-- Вкладка 3: Магический шар с фиолетовым свечением -->
+        <!-- Вкладка 3: Магический шар с фоном Mystic.jpg -->
         <div id="oracle" class="tab-content">
             <div class="game-card">
                 <div class="game-icon">🔮⭐</div>
@@ -320,11 +358,9 @@
     const lastD16 = document.getElementById('lastD16');
 
     d16Btn.addEventListener('click', () => {
-        // Добавляем анимацию на кнопку или на результат
         d16Btn.classList.add('dice-rolling');
         d16Result.style.opacity = '0.5';
         
-        // Небольшая задержка перед показом результата (эффект "броска")
         setTimeout(() => {
             const value = Math.floor(Math.random() * 16) + 1;
             d16Result.textContent = value;
@@ -334,7 +370,6 @@
             setTimeout(() => { d16Result.style.transform = 'scale(1)'; }, 150);
         }, 200);
         
-        // Убираем класс анимации, чтобы можно было перезапустить
         setTimeout(() => {
             d16Btn.classList.remove('dice-rolling');
         }, 500);
@@ -353,7 +388,7 @@
         setTimeout(() => { percentResult.style.transform = 'scale(1)'; }, 150);
     });
 
-    // === 3) Магический шар с фиолетовым свечением и магическим светом ответа ===
+    // === 3) Магический шар ===
     const magicBallDiv = document.getElementById('magicBall');
     const ballAnswer = document.getElementById('ballAnswer');
     const lastOracle = document.getElementById('lastOracle');
@@ -363,39 +398,28 @@
     }
 
     magicBallDiv.addEventListener('click', () => {
-        // 1. Убираем предыдущие анимации, если есть
         magicBallDiv.classList.remove('magic-active');
         ballAnswer.classList.remove('answer-magic-glow');
         
-        // 2. Принудительный reflow для перезапуска анимации
         void magicBallDiv.offsetWidth;
         void ballAnswer.offsetWidth;
         
-        // 3. Добавляем фиолетовое свечение шару
         magicBallDiv.classList.add('magic-active');
         
-        // 4. Получаем ответ
         const answer = getRandomYesNo();
         
-        // 5. Немного задерживаем показ ответа, чтобы свечение успело начаться
         setTimeout(() => {
             ballAnswer.textContent = answer;
             lastOracle.textContent = answer;
-            
-            // 6. Добавляем магический свет ответу
             ballAnswer.classList.add('answer-magic-glow');
-            
-            // 7. Эффект "вспышки" на ответе
             ballAnswer.style.transform = 'scale(1.2)';
             setTimeout(() => { ballAnswer.style.transform = 'scale(1)'; }, 200);
         }, 100);
         
-        // 8. Вибрация шара
         magicBallDiv.style.transform = 'rotate(3deg) scale(0.98)';
         setTimeout(() => { magicBallDiv.style.transform = 'rotate(-3deg) scale(0.98)'; }, 50);
         setTimeout(() => { magicBallDiv.style.transform = 'rotate(0deg) scale(1)'; }, 150);
         
-        // 9. Убираем класс свечения через некоторое время
         setTimeout(() => {
             magicBallDiv.classList.remove('magic-active');
         }, 700);
@@ -417,7 +441,5 @@
         });
     });
 </script>
-</body>
-</html>
 </body>
 </html>
