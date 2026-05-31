@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Мой современный сайт</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #f6f9fc 0%, #eef2f5 100%);
+            color: #1a2c3e;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e6f9f, #2b9c6c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #2c4c6e;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #1e88e5;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 100px 0 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1a4d6b, #238b5e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 32px;
+            color: #2c5a7a;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #1e6f9f;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.25s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #0f5a87;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Cards / Features */
+        .features {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 48px;
+            font-weight: 700;
+            color: #1f3b4c;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 32px 24px;
+            flex: 1 1 280px;
+            text-align: center;
+            transition: 0.2s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+        }
+
+        /* About */
+        .about {
+            background: white;
+            border-radius: 48px;
+            margin: 40px 0;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Footer */
+        footer {
+            background: #0e2a38;
+            color: #cbd5e1;
+            padding: 40px 0 24px;
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #b9d7ef;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .about {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">✨ MyBrand</div>
+            <ul class="nav-links">
+                <li><a href="#">Главная</a></li>
+                <li><a href="#features">Возможности</a></li>
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#">Контакты</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <section class="hero">
+            <h1>Создай что-то значимое</h1>
+            <p>Простой, красивый и современный сайт. Готов к запуску за 5 минут. Адаптивный и лёгкий.</p>
+            <a href="#" class="btn">Начать →</a>
+        </section>
+    </div>
+
+    <div class="container" id="features">
+        <section class="features">
+            <h2 class="section-title">Почему выбирают нас</h2>
+            <div class="cards">
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Молниеносно</h3>
+                    <p>Минималистичный код, который грузится за доли секунды на любом устройстве.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎨</div>
+                    <h3>Стильный дизайн</h3>
+                    <p>Современные градиенты, плавные тени и приятная цветовая гамма.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <h3>Адаптивность</h3>
+                    <p>Идеально смотрится на телефонах, планшетах и больших экранах.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="container" id="about">
+        <section class="about">
+            <h2 class="section-title">Немного о проекте</h2>
+            <p style="max-width: 700px; margin: 0 auto; font-size: 1.1rem;">Этот шаблон создан, чтобы вы могли быстро представить свои идеи в сети. Замените текст, изображения, ссылки — и ваш уникальный сайт готов. HTML + CSS в одном файле — никаких сложностей.</p>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-links">
+            <a href="#">О нас</a>
+            <a href="#">Услуги</a>
+            <a href="#">Блог</a>
+            <a href="#">Контакты</a>
+        </div>
+        <p>© 2026 Мой современный сайт. Вдохновляй и создавай.</p>
+    </div>
+</footer>
+
+</body>
+</html>
