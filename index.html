@@ -25,6 +25,33 @@
             padding: 0 24px;
         }
 
+        /* Всплывающее уведомление */
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #1a1a2e;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-family: inherit;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
         /* Header с вкладками */
         header {
             background: rgba(0, 0, 0, 0.7);
@@ -81,7 +108,6 @@
             position: relative;
         }
 
-        /* Затемнение фона для читаемости текста */
         .tab-content::before {
             content: '';
             position: absolute;
@@ -103,7 +129,6 @@
             display: block;
         }
 
-        /* Фоны для каждой вкладки */
         #dice16 {
             background-image: url('Pub.png');
         }
@@ -121,7 +146,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Карточка игры (полупрозрачная для читаемости) */
         .game-card {
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(8px);
@@ -198,7 +222,6 @@
             font-weight: bold;
         }
 
-        /* ===== АНИМАЦИЯ КУБИКА ===== */
         @keyframes shakeRoll {
             0% { transform: rotate(0deg) scale(1); }
             20% { transform: rotate(30deg) scale(1.1); }
@@ -212,7 +235,6 @@
             animation: shakeRoll 0.4s ease-in-out;
         }
 
-        /* ===== МАГИЧЕСКИЙ ШАР ===== */
         .magic-ball {
             width: 220px;
             height: 220px;
@@ -232,7 +254,6 @@
             transform: scale(0.97);
         }
 
-        /* Фиолетовое свечение при активации */
         @keyframes purpleGlow {
             0% { box-shadow: 0 0 20px rgba(156, 39, 176, 0.4), inset 0 0 10px rgba(156, 39, 176, 0.2); }
             25% { box-shadow: 0 0 60px rgba(156, 39, 176, 0.9), inset 0 0 25px rgba(156, 39, 176, 0.5); }
@@ -262,7 +283,6 @@
             transition: all 0.2s;
         }
 
-        /* Магический свет для ответа */
         @keyframes answerGlow {
             0% { text-shadow: 0 0 5px #ff00ff, color: #d4af37; background: #1a1a2e; }
             50% { text-shadow: 0 0 25px #ff00ff, 0 0 10px #aa00ff; color: #ffffff; background: #2a0a5a; }
@@ -289,10 +309,14 @@
             h2 { font-size: 1.6rem; }
             .magic-ball { width: 170px; height: 170px; }
             .ball-answer { width: 75px; height: 75px; font-size: 1.4rem; }
+            .toast-notification { font-size: 1rem; padding: 10px 20px; white-space: nowrap; }
         }
     </style>
 </head>
 <body>
+
+<!-- Всплывающее уведомление -->
+<div id="toastNotification" class="toast-notification"></div>
 
 <header>
     <div class="container">
@@ -306,7 +330,6 @@
 
 <main>
     <div class="container">
-        <!-- Вкладка 1: Кубик 1d16 с фоном Pub.png -->
         <div id="dice16" class="tab-content active">
             <div class="game-card">
                 <div class="game-icon">🎲⚡</div>
@@ -318,7 +341,6 @@
             </div>
         </div>
 
-        <!-- Вкладка 2: Число 1–100 с фоном Hunt.jpg -->
         <div id="percent" class="tab-content">
             <div class="game-card">
                 <div class="game-icon">🎯✨</div>
@@ -330,7 +352,6 @@
             </div>
         </div>
 
-        <!-- Вкладка 3: Магический шар с фоном Mystic.jpg -->
         <div id="oracle" class="tab-content">
             <div class="game-card">
                 <div class="game-icon">🔮⭐</div>
@@ -352,7 +373,22 @@
 </footer>
 
 <script>
-    // === 1) Кубик 1d16 с анимацией броска ===
+    // Функция показа всплывающего уведомления
+    function showToast(message) {
+        const toast = document.getElementById('toastNotification');
+        toast.textContent = message;
+        toast.classList.remove('show');
+        // Форсируем реflow для перезапуска анимации
+        void toast.offsetWidth;
+        toast.classList.add('show');
+        
+        // Скрываем через 2 секунды
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2000);
+    }
+
+    // === 1) Кубик 1d16 ===
     const d16Btn = document.getElementById('rollD16Btn');
     const d16Result = document.getElementById('d16Result');
     const lastD16 = document.getElementById('lastD16');
@@ -388,7 +424,7 @@
         setTimeout(() => { percentResult.style.transform = 'scale(1)'; }, 150);
     });
 
-    // === 3) Магический шар ===
+    // === 3) Магический шар с всплывающим окном ===
     const magicBallDiv = document.getElementById('magicBall');
     const ballAnswer = document.getElementById('ballAnswer');
     const lastOracle = document.getElementById('lastOracle');
@@ -397,7 +433,17 @@
         return Math.random() < 0.5 ? "ДА" : "НЕТ";
     }
 
+    // Функция получения текста для всплывающего окна в зависимости от ответа
+    function getToastMessage(answer) {
+        if (answer === "ДА") {
+            return "✨ Кирилл — тебя ебёт отчим! ✨";
+        } else {
+            return "🌙 Кириллу сын выблядка 🌙";
+        }
+    }
+
     magicBallDiv.addEventListener('click', () => {
+        // Анимации шара
         magicBallDiv.classList.remove('magic-active');
         ballAnswer.classList.remove('answer-magic-glow');
         
@@ -414,8 +460,13 @@
             ballAnswer.classList.add('answer-magic-glow');
             ballAnswer.style.transform = 'scale(1.2)';
             setTimeout(() => { ballAnswer.style.transform = 'scale(1)'; }, 200);
+            
+            // ПОКАЗЫВАЕМ ВСПЛЫВАЮЩЕЕ ОКНО с текстом для Кирилла
+            const toastMessage = getToastMessage(answer);
+            showToast(toastMessage);
         }, 100);
         
+        // Вибрация шара
         magicBallDiv.style.transform = 'rotate(3deg) scale(0.98)';
         setTimeout(() => { magicBallDiv.style.transform = 'rotate(-3deg) scale(0.98)'; }, 50);
         setTimeout(() => { magicBallDiv.style.transform = 'rotate(0deg) scale(1)'; }, 150);
@@ -425,7 +476,7 @@
         }, 700);
     });
 
-    // === Переключение между вкладками ===
+    // Переключение вкладок
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
 
