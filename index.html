@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>GregVidCards — магазин видеокарт, процессоров и БП</title>
+    <title>GVC — GregVidCards | Магазин комплектующих</title>
     <style>
         * {
             margin: 0;
@@ -24,7 +24,7 @@
             padding: 0 24px;
         }
 
-        /* Шапка с логотипом */
+        /* Шапка */
         header {
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(12px);
@@ -53,17 +53,13 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+            cursor: pointer;
         }
 
         .logo-crown {
             font-size: 2rem;
         }
 
-        .logo-text {
-            letter-spacing: 2px;
-        }
-
-        /* Кнопки входа/регистрации */
         .auth-buttons {
             display: flex;
             gap: 12px;
@@ -140,7 +136,7 @@
             box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
         }
 
-        /* Контент вкладок */
+        /* Контент */
         .tab-content {
             display: none;
             animation: fadeIn 0.3s ease;
@@ -156,68 +152,58 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Модальные окна */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+        /* Главная страница */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 140, 0, 0.05));
+            border-radius: 48px;
+            margin-bottom: 40px;
         }
 
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #1e1e2e;
-            border-radius: 24px;
-            padding: 32px;
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
-
-        .modal-content h3 {
-            color: #ffd700;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .modal-content input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #2a2a3e;
-            border: 1px solid #3a3a4e;
-            border-radius: 12px;
-            color: white;
-            font-size: 1rem;
-        }
-
-        .modal-content button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
+        .hero h1 {
+            font-size: 3rem;
             background: linear-gradient(135deg, #ffd700, #ff8c00);
-            border: none;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .hero .crowns {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #ddd;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .stat {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 20px 30px;
             border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
+            border: 1px solid rgba(255, 215, 0, 0.2);
         }
 
-        .close-modal {
-            background: none;
-            color: #ff6b6b;
-            margin-top: 10px;
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffd700;
         }
 
-        /* Категории товаров */
+        /* Товары */
         .category-section {
             margin-bottom: 40px;
         }
@@ -285,6 +271,20 @@
             margin: 10px 0;
         }
 
+        .product-stock {
+            color: #aaa;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .product-stock.low {
+            color: #ffaa44;
+        }
+
+        .product-stock.out {
+            color: #ff6b6b;
+        }
+
         .add-to-cart {
             background: linear-gradient(135deg, #ffd700, #ff8c00);
             border: none;
@@ -296,7 +296,13 @@
             transition: 0.2s;
         }
 
-        .add-to-cart:hover {
+        .add-to-cart:disabled {
+            background: #555;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .add-to-cart:hover:not(:disabled) {
             transform: scale(1.02);
             filter: brightness(1.05);
         }
@@ -315,6 +321,24 @@
             align-items: center;
             padding: 12px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item-controls button {
+            background: rgba(255, 215, 0, 0.2);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         .cart-total {
@@ -383,6 +407,64 @@
             cursor: pointer;
         }
 
+        /* Модалки */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1e1e2e;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .modal-content h3 {
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #2a2a3e;
+            border: 1px solid #3a3a4e;
+            border-radius: 12px;
+            color: white;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-modal {
+            background: none !important;
+            color: #ff6b6b !important;
+        }
+
         footer {
             text-align: center;
             padding: 30px 0;
@@ -394,7 +476,7 @@
         @media (max-width: 700px) {
             .header-content { flex-direction: column; }
             .products-grid { grid-template-columns: 1fr; }
-            .tab-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .hero h1 { font-size: 2rem; }
         }
     </style>
 </head>
@@ -403,389 +485,311 @@
 <header>
     <div class="container">
         <div class="header-content">
-            <div class="logo">
+            <div class="logo" onclick="showMainPage()">
                 <span class="logo-crown">👑</span>
                 <span class="logo-text">GVC</span>
                 <span class="logo-crown">👑</span>
             </div>
-            <div id="authSection">
-                <!-- динамически меняется через JS -->
-            </div>
+            <div id="authSection"></div>
         </div>
     </div>
 </header>
 
 <div class="container">
     <div class="tabs">
-        <button class="tab-btn active" data-tab="shop">🛒 МАГАЗИН</button>
+        <button class="tab-btn" data-tab="main">🏠 ГЛАВНАЯ</button>
+        <button class="tab-btn" data-tab="shop">🛒 МАГАЗИН</button>
         <button class="tab-btn" data-tab="reviews">⭐ ОТЗЫВЫ</button>
         <button class="tab-btn" data-tab="cart">🛍️ КОРЗИНА</button>
     </div>
 
-    <!-- Вкладка Магазин -->
-    <div id="shop" class="tab-content active">
-        <!-- Видеокарты -->
+    <!-- Главная страница -->
+    <div id="main" class="tab-content active">
+        <div class="hero">
+            <div class="crowns">👑👑👑</div>
+            <h1>GregVidCards (GVC)</h1>
+            <p>Крупнейший магазин комплектующих для настоящих ценителей качественного железа. Мы работаем с 2018 года и за это время заслужили доверие тысяч геймеров и профессионалов по всему СНГ.</p>
+            <p>🔥 <strong>Почему GVC?</strong> 🔥</p>
+            <div class="stats">
+                <div class="stat"><div class="stat-number">10 000+</div><div>довольных клиентов</div></div>
+                <div class="stat"><div class="stat-number">24/7</div><div>поддержка</div></div>
+                <div class="stat"><div class="stat-number">⭐ 4.9</div><div>средняя оценка</div></div>
+                <div class="stat"><div class="stat-number">🚚</div><div>бесплатная доставка от 10 000 ₽</div></div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="auth-btn" onclick="document.querySelector('[data-tab=\'shop\']').click()" style="font-size: 1.1rem; padding: 12px 30px;">🛒 Перейти в магазин</button>
+        </div>
+    </div>
+
+    <!-- Магазин -->
+    <div id="shop" class="tab-content">
         <div class="category-section">
             <h2 class="category-title">🎮 ВИДЕОКАРТЫ</h2>
             <div class="products-grid" id="gpuProducts"></div>
         </div>
-
-        <!-- Процессоры -->
         <div class="category-section">
             <h2 class="category-title">⚡ ПРОЦЕССОРЫ</h2>
             <div class="products-grid" id="cpuProducts"></div>
         </div>
-
-        <!-- Блоки питания -->
         <div class="category-section">
             <h2 class="category-title">🔌 БЛОКИ ПИТАНИЯ</h2>
             <div class="products-grid" id="psuProducts"></div>
         </div>
     </div>
 
-    <!-- Вкладка Отзывы -->
+    <!-- Отзывы -->
     <div id="reviews" class="tab-content">
-        <div class="reviews-list" id="reviewsList">
-            <div class="review-item">
-                <div class="review-author">🛒 Гость</div>
-                <div class="review-text">Отличный магазин! RTX 4070 пришла быстро 🔥</div>
-            </div>
-        </div>
+        <div class="reviews-list" id="reviewsList"></div>
         <div class="review-form">
             <textarea id="reviewText" rows="3" placeholder="Напишите свой отзыв..."></textarea>
             <button class="submit-review" id="submitReviewBtn">✍️ Оставить отзыв</button>
         </div>
     </div>
 
-    <!-- Вкладка Корзина -->
+    <!-- Корзина -->
     <div id="cart" class="tab-content">
-        <div id="cartItems" class="cart-items">
-            <div style="text-align: center; padding: 40px;">Корзина пуста</div>
-        </div>
-        <div id="cartTotal" class="cart-total" style="display: none;">Итого: 0 ₽</div>
-        <button id="payBtn" class="pay-btn" style="display: none;">💳 Оплатить по карте</button>
+        <div id="cartItems" class="cart-items"><div style="text-align:center;padding:40px;">Корзина пуста</div></div>
+        <div id="cartTotal" class="cart-total" style="display:none;"></div>
+        <button id="payBtn" class="pay-btn" style="display:none;">💳 Оплатить по карте</button>
     </div>
 </div>
 
 <footer>
     <div class="container">
-        <p>👑 GregVidCards (GVC) — лучшие комплектующие для твоего ПК</p>
+        <p>👑 GregVidCards (GVC) — лучшие комплектующие для твоего ПК. С 2018 года с вами.</p>
     </div>
 </footer>
 
-<!-- Модальное окно регистрации -->
-<div id="registerModal" class="modal">
-    <div class="modal-content">
-        <h3>📝 Регистрация</h3>
-        <input type="text" id="regLogin" placeholder="Логин">
-        <input type="password" id="regPassword" placeholder="Пароль">
-        <button id="registerConfirmBtn">Зарегистрироваться</button>
-        <button class="close-modal" onclick="closeRegisterModal()">Отмена</button>
-    </div>
-</div>
-
-<!-- Модальное окно входа -->
-<div id="loginModal" class="modal">
-    <div class="modal-content">
-        <h3>🔐 Вход</h3>
-        <input type="text" id="loginLogin" placeholder="Логин">
-        <input type="password" id="loginPassword" placeholder="Пароль">
-        <button id="loginConfirmBtn">Войти</button>
-        <button class="close-modal" onclick="closeLoginModal()">Отмена</button>
-    </div>
-</div>
-
-<!-- Модальное окно оплаты -->
-<div id="paymentModal" class="modal">
-    <div class="modal-content">
-        <h3>💳 Оплата картой</h3>
-        <input type="text" placeholder="Номер карты (16 цифр)" maxlength="19">
-        <input type="text" placeholder="MM/YY">
-        <input type="text" placeholder="CVV" maxlength="3">
-        <button id="paymentConfirmBtn">✅ Оплатить</button>
-        <button class="close-modal" onclick="closePaymentModal()">Отмена</button>
-    </div>
-</div>
+<!-- Модалки -->
+<div id="registerModal" class="modal"><div class="modal-content"><h3>📝 Регистрация</h3><input type="text" id="regLogin" placeholder="Логин"><input type="password" id="regPassword" placeholder="Пароль"><button id="registerConfirmBtn">Зарегистрироваться</button><button class="close-modal" onclick="closeRegisterModal()">Отмена</button></div></div>
+<div id="loginModal" class="modal"><div class="modal-content"><h3>🔐 Вход</h3><input type="text" id="loginLogin" placeholder="Логин"><input type="password" id="loginPassword" placeholder="Пароль"><button id="loginConfirmBtn">Войти</button><button class="close-modal" onclick="closeLoginModal()">Отмена</button></div></div>
+<div id="paymentModal" class="modal"><div class="modal-content"><h3>💳 Оплата картой</h3><input type="text" placeholder="Номер карты" maxlength="19"><input type="text" placeholder="MM/YY"><input type="text" placeholder="CVV" maxlength="3"><button id="paymentConfirmBtn">✅ Оплатить</button><button class="close-modal" onclick="closePaymentModal()">Отмена</button></div></div>
 
 <script>
-    // ========== ТОВАРЫ ==========
+    // ========== ТОВАРЫ С ОГРАНИЧЕННЫМ КОЛИЧЕСТВОМ (по 10) ==========
+    let stock = {
+        "rtx4070": 10, "rtx3060ti": 10, "gtx1080ti": 10,
+        "ryzen7800": 10, "ultra7270k": 10, "xeon2695": 10,
+        "m450": 10, "cbr500": 10, "azerty600": 10
+    };
+
     const products = {
         gpu: [
-            { id: "rtx4070", name: "RTX 4070", price: 76270, image: "4070.jpg", category: "gpu" },
-            { id: "rtx3060ti", name: "RTX 3060 Ti", price: 35000, image: "3060.jpg", category: "gpu" },
-            { id: "gtx1080ti", name: "GTX 1080 Ti", price: 22000, image: "1080.jpg", category: "gpu" }
+            { id: "rtx4070", name: "RTX 4070", price: 76270, image: "4070.jpg" },
+            { id: "rtx3060ti", name: "RTX 3060 Ti", price: 35000, image: "3060.jpg" },
+            { id: "gtx1080ti", name: "GTX 1080 Ti", price: 22000, image: "1080.jpg" }
         ],
         cpu: [
-            { id: "ryzen7800", name: "AMD Ryzen 7800", price: 48500, image: "7800.jpg", category: "cpu" },
-            { id: "ultra7270k", name: "Intel Core Ultra 7 270K", price: 42500, image: "270k.jpg", category: "cpu" },
-            { id: "xeon2695", name: "Intel Xeon E5-2695", price: 18500, image: "2695.jpg", category: "cpu" }
+            { id: "ryzen7800", name: "AMD Ryzen 7800", price: 48500, image: "7800.jpg" },
+            { id: "ultra7270k", name: "Intel Core Ultra 7 270K", price: 42500, image: "270k.jpg" },
+            { id: "xeon2695", name: "Intel Xeon E5-2695", price: 18500, image: "2695.jpg" }
         ],
         psu: [
-            { id: "m450", name: "M450 (450W)", price: 3290, image: "450W.jpg", category: "psu" },
-            { id: "cbr500", name: "CBR-ATX (500W)", price: 4150, image: "500W.jpg", category: "psu" },
-            { id: "azerty600", name: "Azerty-RPL (600W)", price: 5290, image: "600W.jpg", category: "psu" }
+            { id: "m450", name: "M450 (450W)", price: 3290, image: "450W.jpg" },
+            { id: "cbr500", name: "CBR-ATX (500W)", price: 4150, image: "500W.jpg" },
+            { id: "azerty600", name: "Azerty-RPL (600W)", price: 5290, image: "600W.jpg" }
         ]
     };
 
-    // Цены взяты из поиска: RTX 4070 — 76 270 ₽ [citation:1], 
-    // БП 450W ~ 3000-4200₽ [citation:2], для остальных — рыночные аналогии
-
-    // ========== ХРАНИЛИЩЕ ==========
-    let currentUser = localStorage.getItem("gvc_user") || null;
+    // Корзина: { id, quantity }
     let cart = JSON.parse(localStorage.getItem("gvc_cart") || "[]");
-    let reviews = JSON.parse(localStorage.getItem("gvc_reviews") || `[
-        {"author": "🛒 Гость", "text": "Отличный магазин! RTX 4070 пришла быстро 🔥"}
-    ]`);
+    let currentUser = localStorage.getItem("gvc_user") || null;
+    let reviews = JSON.parse(localStorage.getItem("gvc_reviews") || `[{"author":"🛒 Гость","text":"Отличный магазин! RTX 4070 пришла быстро 🔥"}]`);
 
-    // ========== ФУНКЦИИ СОХРАНЕНИЯ ==========
-    function saveCart() {
-        localStorage.setItem("gvc_cart", JSON.stringify(cart));
+    function saveCart() { localStorage.setItem("gvc_cart", JSON.stringify(cart)); }
+    function saveReviews() { localStorage.setItem("gvc_reviews", JSON.stringify(reviews)); }
+    function saveStock() { localStorage.setItem("gvc_stock", JSON.stringify(stock)); }
+    function loadStock() { 
+        const saved = localStorage.getItem("gvc_stock");
+        if (saved) stock = JSON.parse(saved);
     }
+    loadStock();
 
-    function saveReviews() {
-        localStorage.setItem("gvc_reviews", JSON.stringify(reviews));
-    }
-
-    // ========== ОТРИСОВКА ТОВАРОВ ==========
-    function renderProducts() {
-        // Видеокарты
-        const gpuContainer = document.getElementById("gpuProducts");
-        gpuContainer.innerHTML = products.gpu.map(p => `
-            <div class="product-card">
-                <div class="product-image">
-                    ${p.image ? `<img src="${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'product-image-placeholder\\'>🎮</div>'">` : `<div class="product-image-placeholder">🎮</div>`}
-                </div>
-                <div class="product-name">${p.name}</div>
-                <div class="product-price">${p.price.toLocaleString()} ₽</div>
-                <button class="add-to-cart" onclick="addToCart('${p.id}')">🛒 В корзину</button>
-            </div>
-        `).join('');
-
-        // Процессоры
-        const cpuContainer = document.getElementById("cpuProducts");
-        cpuContainer.innerHTML = products.cpu.map(p => `
-            <div class="product-card">
-                <div class="product-image">
-                    ${p.image ? `<img src="${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'product-image-placeholder\\'>⚡</div>'">` : `<div class="product-image-placeholder">⚡</div>`}
-                </div>
-                <div class="product-name">${p.name}</div>
-                <div class="product-price">${p.price.toLocaleString()} ₽</div>
-                <button class="add-to-cart" onclick="addToCart('${p.id}')">🛒 В корзину</button>
-            </div>
-        `).join('');
-
-        // БП
-        const psuContainer = document.getElementById("psuProducts");
-        psuContainer.innerHTML = products.psu.map(p => `
-            <div class="product-card">
-                <div class="product-image">
-                    ${p.image ? `<img src="${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'product-image-placeholder\\'>🔌</div>'">` : `<div class="product-image-placeholder">🔌</div>`}
-                </div>
-                <div class="product-name">${p.name}</div>
-                <div class="product-price">${p.price.toLocaleString()} ₽</div>
-                <button class="add-to-cart" onclick="addToCart('${p.id}')">🛒 В корзину</button>
-            </div>
-        `).join('');
-    }
-
-    // Найти товар по ID
     function findProductById(id) {
         const all = [...products.gpu, ...products.cpu, ...products.psu];
         return all.find(p => p.id === id);
     }
 
-    // Добавить в корзину
+    function getStock(id) { return stock[id] || 0; }
+    function decreaseStock(id) { if (stock[id] > 0) stock[id]--; saveStock(); renderProducts(); }
+    function increaseStock(id) { stock[id]++; saveStock(); renderProducts(); }
+
+    // Добавление в корзину
     window.addToCart = function(productId) {
         const product = findProductById(productId);
         if (!product) return;
+        const stockCount = getStock(productId);
+        if (stockCount <= 0) { showToast("❌ Товар закончился!"); return; }
         
         const existing = cart.find(item => item.id === productId);
         if (existing) {
+            if (existing.quantity >= stockCount) { showToast("❌ Нет больше на складе"); return; }
             existing.quantity++;
         } else {
-            cart.push({ ...product, quantity: 1 });
+            cart.push({ id: productId, quantity: 1 });
         }
         saveCart();
         renderCart();
-        showToast("✅ " + product.name + " добавлен в корзину");
+        renderProducts();
+        showToast(`✅ ${product.name} добавлен в корзину`);
     };
 
-    // Отрисовать корзину
+    window.removeFromCart = function(id) {
+        const idx = cart.findIndex(item => item.id === id);
+        if (idx !== -1) {
+            cart.splice(idx, 1);
+            saveCart();
+            renderCart();
+            renderProducts();
+            showToast("🗑️ Товар удалён из корзины");
+        }
+    };
+
+    window.updateCartQuantity = function(id, delta) {
+        const item = cart.find(i => i.id === id);
+        if (!item) return;
+        const stockCount = getStock(id);
+        const newQty = item.quantity + delta;
+        if (newQty < 1) { removeFromCart(id); return; }
+        if (newQty > stockCount) { showToast("❌ Недостаточно на складе"); return; }
+        item.quantity = newQty;
+        saveCart();
+        renderCart();
+        renderProducts();
+    };
+
+    function renderProducts() {
+        const renderCat = (containerId, productList) => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = productList.map(p => {
+                const stockCount = getStock(p.id);
+                const stockClass = stockCount === 0 ? "out" : (stockCount <= 3 ? "low" : "");
+                const stockText = stockCount === 0 ? "❌ Нет в наличии" : `📦 Осталось: ${stockCount} шт.`;
+                return `
+                    <div class="product-card">
+                        <div class="product-image">
+                            ${p.image ? `<img src="${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'product-image-placeholder\\'>🎮</div>'">` : `<div class="product-image-placeholder">🎮</div>`}
+                        </div>
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-price">${p.price.toLocaleString()} ₽</div>
+                        <div class="product-stock ${stockClass}">${stockText}</div>
+                        <button class="add-to-cart" onclick="addToCart('${p.id}')" ${stockCount === 0 ? 'disabled' : ''}>🛒 В корзину</button>
+                    </div>
+                `;
+            }).join('');
+        };
+        renderCat("gpuProducts", products.gpu);
+        renderCat("cpuProducts", products.cpu);
+        renderCat("psuProducts", products.psu);
+    }
+
     function renderCart() {
         const container = document.getElementById("cartItems");
         const totalDiv = document.getElementById("cartTotal");
         const payBtn = document.getElementById("payBtn");
-        
         if (cart.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 40px;">🛒 Корзина пуста</div>';
+            container.innerHTML = '<div style="text-align:center;padding:40px;">🛒 Корзина пуста</div>';
             totalDiv.style.display = "none";
             payBtn.style.display = "none";
             return;
         }
-        
         let total = 0;
         container.innerHTML = cart.map(item => {
-            const sum = item.price * item.quantity;
+            const product = findProductById(item.id);
+            if (!product) return "";
+            const sum = product.price * item.quantity;
             total += sum;
             return `
                 <div class="cart-item">
-                    <div><strong>${item.name}</strong><br>${item.price.toLocaleString()} ₽ × ${item.quantity}</div>
-                    <div>${sum.toLocaleString()} ₽ <button onclick="removeFromCart('${item.id}')" style="background:#ff6b6b; border:none; padding:5px 12px; border-radius:20px; margin-left:10px; cursor:pointer;">🗑️</button></div>
+                    <div><strong>${product.name}</strong><br>${product.price.toLocaleString()} ₽ × ${item.quantity}</div>
+                    <div class="cart-item-controls">
+                        <button onclick="updateCartQuantity('${item.id}', -1)">-</button>
+                        <span style="min-width:40px;text-align:center;">${item.quantity}</span>
+                        <button onclick="updateCartQuantity('${item.id}', 1)" ${item.quantity >= getStock(item.id) ? 'disabled' : ''}>+</button>
+                        <button onclick="removeFromCart('${item.id}')" style="background:#ff6b6b; width:auto; padding:5px 12px; border-radius:20px;">🗑️</button>
+                    </div>
                 </div>
             `;
         }).join('');
-        
         totalDiv.innerHTML = `💵 Итого: ${total.toLocaleString()} ₽`;
         totalDiv.style.display = "block";
         payBtn.style.display = "block";
     }
 
-    // Удалить из корзины
-    window.removeFromCart = function(id) {
-        const index = cart.findIndex(item => item.id === id);
-        if (index !== -1) {
-            if (cart[index].quantity > 1) {
-                cart[index].quantity--;
-            } else {
-                cart.splice(index, 1);
-            }
-            saveCart();
-            renderCart();
-        }
-    };
-
-    // Отзывы
     function renderReviews() {
         const container = document.getElementById("reviewsList");
-        if (reviews.length === 0) {
-            container.innerHTML = '<div style="text-align:center; padding:20px;">Пока нет отзывов. Будьте первым! ⭐</div>';
-            return;
-        }
-        container.innerHTML = reviews.map(r => `
-            <div class="review-item">
-                <div class="review-author">👤 ${escapeHtml(r.author)}</div>
-                <div class="review-text">${escapeHtml(r.text)}</div>
-            </div>
-        `).join('');
+        if (!reviews.length) { container.innerHTML = '<div style="text-align:center;padding:20px;">Пока нет отзывов</div>'; return; }
+        container.innerHTML = reviews.map(r => `<div class="review-item"><div class="review-author">👤 ${escapeHtml(r.author)}</div><div class="review-text">${escapeHtml(r.text)}</div></div>`).join('');
     }
 
-    function escapeHtml(str) {
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { return { '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m]; }); }
 
-    // ========== АВТОРИЗАЦИЯ ==========
+    // Авторизация
     function updateAuthUI() {
         const authSection = document.getElementById("authSection");
         if (currentUser) {
-            authSection.innerHTML = `
-                <div class="user-info">
-                    <span>👑</span>
-                    <span class="user-name">${escapeHtml(currentUser)}</span>
-                    <button class="logout-btn" onclick="logout()">🚪 Выйти</button>
-                </div>
-            `;
+            authSection.innerHTML = `<div class="user-info"><span>👑</span><span class="user-name">${escapeHtml(currentUser)}</span><button class="logout-btn" onclick="logout()">🚪 Выйти</button></div>`;
         } else {
-            authSection.innerHTML = `
-                <div class="auth-buttons">
-                    <button class="auth-btn" onclick="openRegisterModal()">📝 Регистрация</button>
-                    <button class="auth-btn" onclick="openLoginModal()">🔐 Вход</button>
-                </div>
-            `;
+            authSection.innerHTML = `<div class="auth-buttons"><button class="auth-btn" onclick="openRegisterModal()">📝 Регистрация</button><button class="auth-btn" onclick="openLoginModal()">🔐 Вход</button></div>`;
         }
     }
 
-    function logout() {
-        currentUser = null;
-        localStorage.removeItem("gvc_user");
-        updateAuthUI();
-        showToast("👋 Вы вышли из аккаунта");
-    }
-
-    // Модалки регистрации
-    function openRegisterModal() {
-        document.getElementById("registerModal").classList.add("active");
-    }
-    function closeRegisterModal() {
-        document.getElementById("registerModal").classList.remove("active");
-    }
-    function openLoginModal() {
-        document.getElementById("loginModal").classList.add("active");
-    }
-    function closeLoginModal() {
-        document.getElementById("loginModal").classList.remove("active");
-    }
-    function closePaymentModal() {
-        document.getElementById("paymentModal").classList.remove("active");
-    }
+    function logout() { currentUser = null; localStorage.removeItem("gvc_user"); updateAuthUI(); showToast("👋 Вы вышли"); }
+    function openRegisterModal() { document.getElementById("registerModal").classList.add("active"); }
+    function closeRegisterModal() { document.getElementById("registerModal").classList.remove("active"); }
+    function openLoginModal() { document.getElementById("loginModal").classList.add("active"); }
+    function closeLoginModal() { document.getElementById("loginModal").classList.remove("active"); }
+    function closePaymentModal() { document.getElementById("paymentModal").classList.remove("active"); }
 
     function register() {
         const login = document.getElementById("regLogin").value.trim();
-        const password = document.getElementById("regPassword").value;
-        if (!login || !password) {
-            showToast("❌ Заполните все поля");
-            return;
-        }
+        const pass = document.getElementById("regPassword").value;
+        if (!login || !pass) { showToast("❌ Заполните поля"); return; }
         const users = JSON.parse(localStorage.getItem("gvc_users") || "{}");
-        if (users[login]) {
-            showToast("❌ Пользователь уже существует");
-            return;
-        }
-        users[login] = password;
+        if (users[login]) { showToast("❌ Пользователь существует"); return; }
+        users[login] = pass;
         localStorage.setItem("gvc_users", JSON.stringify(users));
         currentUser = login;
         localStorage.setItem("gvc_user", currentUser);
         updateAuthUI();
         closeRegisterModal();
-        showToast("✅ Регистрация успешна! Добро пожаловать, " + login);
-        document.getElementById("regLogin").value = "";
-        document.getElementById("regPassword").value = "";
+        showToast("✅ Добро пожаловать, " + login);
     }
 
     function login() {
         const login = document.getElementById("loginLogin").value.trim();
-        const password = document.getElementById("loginPassword").value;
+        const pass = document.getElementById("loginPassword").value;
         const users = JSON.parse(localStorage.getItem("gvc_users") || "{}");
-        if (users[login] && users[login] === password) {
+        if (users[login] && users[login] === pass) {
             currentUser = login;
             localStorage.setItem("gvc_user", currentUser);
             updateAuthUI();
             closeLoginModal();
             showToast("🔓 Добро пожаловать, " + login);
-        } else {
-            showToast("❌ Неверный логин или пароль");
-        }
-        document.getElementById("loginLogin").value = "";
-        document.getElementById("loginPassword").value = "";
+        } else { showToast("❌ Неверный логин или пароль"); }
     }
 
-    // ========== ОПЛАТА ==========
     function openPaymentModal() {
-        if (!currentUser) {
-            showToast("🔐 Сначала войдите в аккаунт для оплаты");
-            return;
-        }
-        if (cart.length === 0) {
-            showToast("🛒 Корзина пуста");
-            return;
-        }
+        if (!currentUser) { showToast("🔐 Войдите в аккаунт"); return; }
+        if (cart.length === 0) { showToast("🛒 Корзина пуста"); return; }
         document.getElementById("paymentModal").classList.add("active");
     }
 
     function processPayment() {
-        const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        showToast(`💳 Оплата ${total.toLocaleString()} ₽ прошла успешно! Спасибо за покупку! 🎉`);
+        // Списать товары со склада
+        for (const item of cart) {
+            for (let i = 0; i < item.quantity; i++) decreaseStock(item.id);
+        }
         cart = [];
         saveCart();
         renderCart();
+        renderProducts();
         closePaymentModal();
+        showToast("💳 Оплата прошла успешно! Спасибо за покупку! 🎉");
     }
 
-    // Toast уведомление
     function showToast(msg) {
         let toast = document.getElementById("toastNotification");
         if (!toast) {
@@ -796,30 +800,31 @@
         }
         toast.textContent = msg;
         toast.style.opacity = "1";
-        setTimeout(() => { toast.style.opacity = "0"; }, 2500);
+        setTimeout(() => toast.style.opacity = "0", 2500);
     }
 
-    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    window.showMainPage = function() {
+        document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+        document.querySelector(".tab-btn[data-tab='main']").classList.add("active");
+        document.getElementById("main").classList.add("active");
+    };
+
+    // Назначение обработчиков
     document.getElementById("registerConfirmBtn").onclick = register;
     document.getElementById("loginConfirmBtn").onclick = login;
     document.getElementById("paymentConfirmBtn").onclick = processPayment;
     document.getElementById("payBtn").onclick = openPaymentModal;
-
     document.getElementById("submitReviewBtn").onclick = () => {
         const text = document.getElementById("reviewText").value.trim();
-        if (!text) {
-            showToast("✏️ Напишите отзыв");
-            return;
-        }
-        const author = currentUser ? currentUser : "🛒 Гость";
-        reviews.unshift({ author: author, text: text });
+        if (!text) { showToast("✏️ Напишите отзыв"); return; }
+        reviews.unshift({ author: currentUser || "🛒 Гость", text: text });
         saveReviews();
         renderReviews();
         document.getElementById("reviewText").value = "";
         showToast("⭐ Спасибо за отзыв!");
     };
 
-    // Переключение вкладок
     document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.onclick = () => {
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
